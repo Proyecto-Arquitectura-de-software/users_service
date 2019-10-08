@@ -1,0 +1,79 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Servicio de información de clientes"
+tags: 
+- name: "User"
+  description: "Información del usuario."
+paths:
+  /client/{id}:
+    get:
+      tags:
+      - "User"
+      summary: "Obtiene la información del cliente."
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "Id del cliente."
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "La solicitud fue exitosa."
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "El usuario solicitado no existe."
+    put:
+      tags:
+      - "User"
+      summary: "Modifica la información del cliente"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "Id del cliente."
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        required: true
+        description: "Objeto que contiene sólo los cambios en la información."
+        schema:
+            $ref: "#/definitions/User"
+      responses:
+        204:
+          description: "La solicitud fue exitosa."
+        400:
+          description: "La solicitud no tiene los parámetros requeridos."
+  /client:
+    post:
+      tags:
+      - "User"
+      summary: "Añade un nuevo cliente."
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto con la información del usuario."
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      consumes:
+      - "application/json"
+      produces:
+      - ""
+      responses:
+        201:
+          description: "El nuevo cliente fue creado exitosamente."
+        400:
+          description: "La solicitud no tiene los parámetros requeridos."
+definitions:
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      lastname:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"

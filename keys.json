@@ -1,0 +1,11 @@
+{
+    "db" : {
+        "mongo" : {
+            "url" : "mongodb://34.69.25.250:27017",
+            "options" : { 
+                "useNewUrlParser": true,
+                "useUnifiedTopology": true 
+            }
+        }
+    }
+}
