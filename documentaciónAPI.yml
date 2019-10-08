@@ -5,8 +5,10 @@ info:
 tags: 
 - name: "User"
   description: "Información del usuario."
+- name: "Establishment"
+  description: "Información del estableciemiento."
 paths:
-  /client/{id}:
+  /clients/{id}:
     get:
       tags:
       - "User"
@@ -45,7 +47,7 @@ paths:
           description: "La solicitud fue exitosa."
         400:
           description: "La solicitud no tiene los parámetros requeridos."
-  /client:
+  /clients:
     post:
       tags:
       - "User"
@@ -66,6 +68,116 @@ paths:
           description: "El nuevo cliente fue creado exitosamente."
         400:
           description: "La solicitud no tiene los parámetros requeridos."
+  /establishments:
+    get:
+      tags:
+      - "Establishment"
+      summary: "Obtiene los establecimientos cercanos que cumplan con ciertos filtros"
+      parameters:
+      - in: "query"
+        name : "coordinateX"
+        description : "Coordenada x de ubicación del cliente."
+        required : true
+        type : "number"
+        format : "float"
+      - in: "query"
+        name : "coordinateY"
+        description : "Coordenada y de ubicación del cliente."
+        required : true
+        type : "number"
+        format : "float"
+      - in: "query"
+        name : "minimumScore"
+        description : "Puntaje mínimo aceptado para un establecimiento."
+        type : "integer"
+      - in: "query"
+        name : "maximumDeliveryTime"
+        description : "Tiempo máximo de entrega aceptado para un establecimiento (en minutos)."
+        type : "integer"
+      - in: "query"
+        name : "maximumDeliveryCost"
+        description : "Costo máximo de entrega aceptado para un establecimiento."
+        type : "integer"
+      responses:
+        200:
+          description: "La solicitud fue exitosa"
+          schema:
+            $ref: '#/definitions/Establishment'
+    post:
+      tags:
+      - "Establishment"
+      summary: "Añade un nuevo establecimiento."
+      produces:
+      - ""
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Objeto con la información del establecimiento."
+        required: true
+        schema:
+          $ref: '#/definitions/InputEstablishment'
+      responses:
+        201:
+            description: "El nuevo establecimiento fue creado exitosamente."
+  /establishments/{id}:
+    get:
+      tags:
+      - "Establishment"
+      summary: "Obtiene un establecimiento identificado por su id."
+      parameters:
+      - in: "path"
+        name : "id"
+        description : "Id del establecimiento."
+        required : true
+        type : "number"
+      responses:
+        200:
+          description: "La solicitud fue exitosa"
+          schema:
+            $ref: '#/definitions/Establishment'
+    put:
+      tags:
+      - "Establishment"
+      summary: "Modifica la información de un establecimiento."
+      produces:
+      - ""
+      parameters:
+      - in: "path"
+        name : "id"
+        description : "Id del establecimiento."
+        required : true
+        type : "number"
+      - in: "body"
+        name: "body"
+        description: "Objeto con la información del establecimiento."
+        required: true
+        schema:
+          $ref: '#/definitions/InputEstablishment'
+      responses:
+        201:
+            description: "El nuevo establecimiento fue creado exitosamente."
+  /establishments/{id}/messages:
+    post:
+      tags:
+      - "Establishment"
+      summary: "Añade un nuevo mensaje (reseña) a un establecimiento."
+      produces:
+      - ""
+      parameters:
+      - in: "path"
+        name : "id"
+        description : "Id del establecimiento."
+        required : true
+        type : "number"
+      - in: "body"
+        name: "body"
+        description: "Objeto con la información del mensaje."
+        required: true
+        schema:
+          $ref: '#/definitions/Message'
+      responses:
+        201:
+            description: "El nuevo mensaje fue añadido exitosamente."
 definitions:
   User:
     type: "object"
@@ -77,3 +189,84 @@ definitions:
       email:
         type: "string"
         format: "email"
+  InputEstablishment:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      coordinateX:
+        type: "number"
+        format: "float"
+      coordinateY:
+        type: "number"
+        format: "float"
+      address:
+        type: "string"
+        format: "email"
+      deliveryTime:
+        type: "integer"
+      deliveryCost:
+        type: "number"
+      paymentMethods:
+        type: "array"
+        items: 
+          type : "string"
+      type:
+        type: "string"
+        enum: ["Restaurant","Market","Drinks","Drugstore","Petstore","Store"]
+      categories:
+        type: "array"
+        items:
+          type: "string"
+  Establishment:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      coordinateX:
+        type: "number"
+        format: "float"
+      coordinateY:
+        type: "number"
+        format: "float"
+      address:
+        type: "string"
+        format: "email"
+      deliveryTime:
+        type: "integer"
+      deliveryCost:
+        type: "number"
+      paymentMethods:
+        type: "array"
+        items: 
+          type : "string"
+      type:
+        type: "string"
+        enum: ["Restaurant","Market","Drinks","Drugstore","Petstore","Store"]
+      categories:
+        type: "array"
+        items:
+          type: "string"
+      score: 
+        type: "number"
+        format: "float"
+      messages:
+        type: "array"
+        items:
+          $ref: '#/definitions/Message'
+      nMessages:
+        type: "integer"
+  Message:
+    type: "object"
+    properties:
+      idPoster:
+        type: "string"
+        format: "hex"
+        minLength: 24
+        maxLength: 24
+      text:
+        type: "string"
+      score:
+        type: "integer"
+        maximum: 5
+        minimum: 1

@@ -23,4 +23,4 @@ app.post('/establishments/:id/messages',routes.establishments.addMessageValidato
 
 app.use(errorHandler);
 
-app.listen(3000);
+app.listen(3001);
