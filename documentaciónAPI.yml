@@ -119,6 +119,8 @@ paths:
       responses:
         201:
             description: "El nuevo establecimiento fue creado exitosamente."
+        400:
+          description: "La solicitud no tiene los parámetros requeridos."
   /establishments/{id}:
     get:
       tags:
@@ -156,6 +158,8 @@ paths:
       responses:
         201:
             description: "El nuevo establecimiento fue creado exitosamente."
+        400:
+          description: "La solicitud no tiene los parámetros requeridos."
   /establishments/{id}/messages:
     post:
       tags:
@@ -178,6 +182,8 @@ paths:
       responses:
         201:
             description: "El nuevo mensaje fue añadido exitosamente."
+        400:
+          description: "La solicitud no tiene los parámetros requeridos."
 definitions:
   User:
     type: "object"

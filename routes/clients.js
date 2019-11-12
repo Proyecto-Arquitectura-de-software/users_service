@@ -29,6 +29,27 @@ module.exports.get = (req,res,next)=>{
     }
 };
 
+module.exports.getByEmailValidator = [
+    check('email').isEmail()
+];
+
+module.exports.getByEmail = (req,res,next)=>{
+    const errors = validationResult(req);
+    if(errors.isEmpty()){
+        mongodb.MongoClient.connect(mongoData.url,mongoData.options,(error,client)=>{
+            if(error) next(error);
+            let collection = client.db('users').collection('clients');
+            collection.findOne({ "email" : req.query.email},(error, docs) => {
+                if (error) next(error);
+                client.close();
+                res.send(docs);
+            });
+        });
+    }else{
+        res.status(400).send(errors);
+    }
+};
+
 module.exports.createValidator = [
     check('name').isString(),
     check('lastname').isString(),
@@ -49,7 +70,7 @@ module.exports.create = (req,res,next)=>{
             collection.insertOne(data,(error,result)=>{
                 if (error) next(error);
                 client.close();
-                res.send(result.ops);
+                res.send(result.ops[0]);
             });
         });
     }else{

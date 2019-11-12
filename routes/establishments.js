@@ -98,7 +98,7 @@ module.exports.create = (req,res,next)=>{
             collection.insertOne(data,(error,result)=>{
                 if (error) next(error);
                 client.close();
-                res.send(result.ops);
+                res.send(result.ops[0]);
             });
         });
     }else{

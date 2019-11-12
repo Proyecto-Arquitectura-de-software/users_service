@@ -1,9 +1,14 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const routes = require('./routes');
 const errorHandler = require('./middleware').errorHandler;
 
+app.use(cors());
+
 app.use(bodyParser.json());
+
+app.get('/clients',routes.clients.getByEmailValidator,routes.clients.getByEmail);
 
 app.get('/clients/:id',routes.clients.getValidator,routes.clients.get);
 
