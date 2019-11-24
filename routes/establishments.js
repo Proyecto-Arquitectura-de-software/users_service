@@ -11,7 +11,8 @@ const establishmentValues = [
     "deliveryCost",
     "paymentMethods",
     "type",
-    "categories"
+    "categories",
+    "email"
 ];
 
 module.exports.getValidator = [
@@ -59,6 +60,27 @@ module.exports.getByFilter = (req,res,next)=>{
             if(error) next(error);
             let collection = client.db('users').collection('establishments');
             collection.find(filter).toArray((error, docs) => {
+                if (error) next(error);
+                client.close();
+                res.send(docs);
+            });
+        });
+    }else{
+        res.status(400).send(errors);
+    }
+};
+
+module.exports.getByEmailValidator = [
+    check('email').isEmail()
+];
+
+module.exports.getByEmail = (req,res,next)=>{
+    const errors = validationResult(req);
+    if(errors.isEmpty()){
+        mongodb.MongoClient.connect(mongoData.url,mongoData.options,(error,client)=>{
+            if(error) next(error);
+            let collection = client.db('users').collection('establishments');
+            collection.findOne({ "email" : req.query.email},(error, docs) => {
                 if (error) next(error);
                 client.close();
                 res.send(docs);

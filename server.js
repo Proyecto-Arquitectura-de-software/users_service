@@ -20,6 +20,8 @@ app.get('/establishments',routes.establishments.getByFilterValidator,routes.esta
 
 app.get('/establishments/:id',routes.establishments.getValidator,routes.establishments.get);
 
+app.get('/establishment',routes.establishments.getByEmailValidator,routes.establishments.getByEmail);
+
 app.post('/establishments',routes.establishments.createValidator,routes.establishments.create);
 
 app.put('/establishments/:id',routes.establishments.setValidator,routes.establishments.set);
